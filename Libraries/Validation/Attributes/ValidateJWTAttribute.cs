@@ -47,7 +47,7 @@ namespace Validation.Attributes
                 {
                     context.HttpContext.Response.StatusCode = 401;
                     await context.HttpContext.Response.Body.WriteAsync(Encoding.UTF8.GetBytes("You did not supply a token or it is malformed."));
-                    context.Result = new UnauthorizedObjectResult(new { });
+                    context.Result = new UnauthorizedResult();
                 }
                 else
                 {
@@ -58,7 +58,7 @@ namespace Validation.Attributes
                     {
                         context.HttpContext.Response.StatusCode = 401;
                         await context.HttpContext.Response.Body.WriteAsync(Encoding.UTF8.GetBytes("Your token has expired. Please autheticate with a refreshed or new token."));
-                        context.Result = new UnauthorizedObjectResult(new { });
+                        context.Result = new UnauthorizedResult();
                     }
                     else
                     {
@@ -91,7 +91,7 @@ namespace Validation.Attributes
                         {
                             context.HttpContext.Response.StatusCode = 401;
                             await context.HttpContext.Response.Body.WriteAsync(Encoding.UTF8.GetBytes("User account is not active."));
-                            context.Result = new UnauthorizedObjectResult(new { });
+                            context.Result = new UnauthorizedResult();
                         }
                     }
                 }
@@ -100,7 +100,7 @@ namespace Validation.Attributes
             {
                 context.HttpContext.Response.StatusCode = 401;
                 await context.HttpContext.Response.Body.WriteAsync(Encoding.UTF8.GetBytes("You did not supply a token or it is malformed."));
-                context.Result = new UnauthorizedObjectResult(new { });
+                context.Result = new UnauthorizedResult();
             }
         }
     }

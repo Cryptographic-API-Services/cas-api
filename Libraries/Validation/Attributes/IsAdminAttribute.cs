@@ -44,7 +44,7 @@ namespace Validation.Attributes
             {
                 context.HttpContext.Response.StatusCode = 401;
                 await context.HttpContext.Response.Body.WriteAsync(Encoding.UTF8.GetBytes("You are not an admin."));
-                context.Result = new UnauthorizedObjectResult(new { });
+                context.Result = new UnauthorizedResult();
             }
         }
     }

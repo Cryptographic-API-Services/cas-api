@@ -9,8 +9,8 @@
 	<ItemGroup>
 		<PackageReference Include="cas-dotnet-sdk" Version="1.2.5" />
 		<PackageReference Include="cas-helpers" Version="1.0.26" />
-		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-		<PackageReference Include="MongoDB.Bson" Version="3.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+		<PackageReference Include="MongoDB.Bson" Version="3.2.1" />
 	</ItemGroup>
 
 	<ItemGroup>
