@@ -37,7 +37,7 @@ namespace DataLayer.RabbitMQ
                 mail.Subject = "Emergency Kit Recovery - Encryption API Services";
                 mail.Body = String.Format("Your account has been unlocked and the new password is: <b>{0}</b>", message.NewPassword);
                 mail.IsBodyHtml = true;
-                SmtpClientSender.SendMailMessage(mail);
+                await SmtpClientSender.SendMailMessage(mail);
                 this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
             }
             catch (Exception ex)

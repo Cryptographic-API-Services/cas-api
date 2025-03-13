@@ -38,7 +38,7 @@ namespace DataLayer.RabbitMQ
                 mail.Subject = "Email 2FA - Encryption API Services";
                 mail.Body = String.Format("Your login code is: <b>{0}</b>", message.HotpCode);
                 mail.IsBodyHtml = true;
-                SmtpClientSender.SendMailMessage(mail);
+                await SmtpClientSender.SendMailMessage(mail);
                 this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
             }
             catch (Exception ex)

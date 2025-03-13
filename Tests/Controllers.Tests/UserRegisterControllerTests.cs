@@ -43,14 +43,15 @@ namespace Controllers.Tests
             mockHttpContextAccessor.SetupGet(x => x.HttpContext.Items).Returns(items.Object);
             mockHttpContextAccessor.SetupGet(x => x.HttpContext.Request.Headers).Returns(headers.Object);
             mockHttpContextAccessor.SetupGet(x => x.HttpContext.Items[Constants.HttpItems.IP]).Returns("127.0.0.1");
-
+            RabbitMQConnection rabbitMqconnection = new RabbitMQConnection();
             this._userRegisterController = new UserRegisterController(new UserRegisterControllerLogic(
                 new UserRepository(databaseSettings, client),
                 new ForgotPasswordRepository(databaseSettings, client),
                 new LogRequestRepository(databaseSettings, client),
                 new CASExceptionRepository(databaseSettings, client),
                 new BenchmarkMethodCache(databaseSettings, client),
-                new ActivateUserQueuePublish(new RabbitMQConnection())
+                new ActivateUserQueuePublish(rabbitMqconnection),
+                new EmergencyKitQueuePublish(rabbitMqconnection)
                 ), mockHttpContextAccessor.Object);
 
             this._userRepositry = new UserRepository(databaseSettings, client);

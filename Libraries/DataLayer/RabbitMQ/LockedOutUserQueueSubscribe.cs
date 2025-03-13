@@ -49,7 +49,7 @@ namespace DataLayer.RabbitMQ
                 mail.Subject = "Locked Out User Account - Encryption API Services";
                 mail.Body = "Your account has been locked out due to many failed login attempts.</br>" + String.Format("To unlock your account click <a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/unlock-account?id={0}&token={1}'>here</a>.", message.UserId, emailToken.UrlSignature);
                 mail.IsBodyHtml = true;
-                SmtpClientSender.SendMailMessage(mail);
+                await SmtpClientSender.SendMailMessage(mail);
                 await this.userRepo.UpdateLockedOutUsersToken(message.UserId, emailToken.Base64HashedToken, emailToken.Base64PublicKey);
                 this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
             }

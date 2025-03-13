@@ -42,7 +42,7 @@ namespace DataLayer.RabbitMQ
                     "</body>" +
                     "</html>";
                 mail.IsBodyHtml = true;
-                SmtpClientSender.SendMailMessage(mail);
+                await SmtpClientSender.SendMailMessage(mail);
                 this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
             }
             catch (Exception ex)

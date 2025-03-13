@@ -1,5 +1,6 @@
 ﻿using API.ControllerLogic;
 using API.Controllers;
+using API.HelperServices;
 using CASHelpers;
 using CASHelpers.Types.HttpResponses.UserAuthentication;
 using DataLayer.Mongo;
@@ -41,11 +42,13 @@ namespace Controllers.Tests
             mockHttpContextAccessor.SetupGet(x => x.HttpContext.Request.Headers[Constants.HeaderNames.Authorization]).Returns(String.Format("Bearer {0}", token));
             mockHttpContextAccessor.SetupGet(x => x.HttpContext.Items[Constants.HttpItems.UserID]).Returns(new JWT().GetUserIdFromToken(token));
             mockHttpContextAccessor.SetupGet(x => x.HttpContext.Request.Headers[Constants.HeaderNames.ApiKey]).Returns(Environment.GetEnvironmentVariable("EasApiKey"));
+            RedisClient redisClient = new RedisClient();
             this._tokenController = new TokenController(mockHttpContextAccessor.Object, new TokenControllerLogic(
                 new UserRepository(databaseSettings, client),
                 new CASExceptionRepository(databaseSettings, client),
                 new DataLayer.Cache.BenchmarkMethodCache(databaseSettings, client),
-                new RedisClient()));
+                redisClient,
+                new JWTPublicKeyTrustCertificate(redisClient)));
         }
 
         [Fact]

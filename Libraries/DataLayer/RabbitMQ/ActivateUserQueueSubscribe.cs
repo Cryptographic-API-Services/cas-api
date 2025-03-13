@@ -45,7 +45,7 @@ namespace DataLayer.RabbitMQ
                 mail.Subject = "Account Activation - Encryption API Services ";
                 mail.Body = "We are excited to have you here </br>" + String.Format("<a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/activate?id={0}&token={1}'>Click here to activate</a>", message.UserId, emailToken.UrlSignature);
                 mail.IsBodyHtml = true;
-                SmtpClientSender.SendMailMessage(mail);
+                await SmtpClientSender.SendMailMessage(mail);
                 await this._userRepository.UpdateUsersRsaKeyPairsAndToken(message.UserId, emailToken.Base64PublicKey, emailToken.Base64HashedToken, emailToken.UrlSignature);
                 this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
             }
