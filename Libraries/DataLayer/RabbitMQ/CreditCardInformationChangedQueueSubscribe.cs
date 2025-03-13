@@ -1,9 +1,9 @@
-﻿using Common.Email;
-using DataLayer.RabbitMQ.QueueMessages;
+﻿using DataLayer.RabbitMQ.QueueMessages;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
-using System.Net.Mail;
 using System.Text.Json;
 
 namespace DataLayer.RabbitMQ
@@ -29,16 +29,18 @@ namespace DataLayer.RabbitMQ
         private async void CreditCardInformationChangedMessageReceived(object? sender, BasicDeliverEventArgs e)
         {
             CreditCardInformationChangedQueueMessage message = JsonSerializer.Deserialize<CreditCardInformationChangedQueueMessage>(e.Body.ToArray());
-            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-            SmtpServer.Port = 587;
-            using MailMessage mail = new MailMessage();
-            mail.From = new MailAddress("support@encryptionapiservices.com");
-            mail.To.Add(message.UserEmail);
-            mail.Subject = "Credit Card Changed - Encryption API Services";
-            mail.Body = "We noticed that you changed your credit card information recently. If this wasn't you we recommend changing your password " + String.Format("<a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/forgot-password'>here</a>");
-            mail.IsBodyHtml = true;
-            await SmtpClientSender.SendMailMessage(mail);
-            this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
+            var apiKey = Environment.GetEnvironmentVariable("SendGridKey");
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress("mikemulchrone987@gmail.com", "Mike Mulchrone");
+            var subject = "Credit Card Changed - Encryption API Services";
+            var to = new EmailAddress(message.UserEmail);
+            var htmlContent = "We noticed that you changed your credit card information recently. If this wasn't you we recommend changing your password " + String.Format("<a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/forgot-password'>here</a>");
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, null, htmlContent);
+            var response = await client.SendEmailAsync(msg);
+            if (response.IsSuccessStatusCode)
+            {
+                this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
+            }
         }
     }
 }

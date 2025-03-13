@@ -1,9 +1,9 @@
-﻿using Common.Email;
-using DataLayer.RabbitMQ.QueueMessages;
+﻿using DataLayer.RabbitMQ.QueueMessages;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
-using System.Net.Mail;
 using System.Text.Json;
 
 namespace DataLayer.RabbitMQ
@@ -32,14 +32,18 @@ namespace DataLayer.RabbitMQ
             try
             {
                 Email2FAHotpCodeQueueMessage message = JsonSerializer.Deserialize<Email2FAHotpCodeQueueMessage>(e.Body.ToArray());
-                using MailMessage mail = new MailMessage();
-                mail.From = new MailAddress("support@encryptionapiservices.com");
-                mail.To.Add(message.UserEmail);
-                mail.Subject = "Email 2FA - Encryption API Services";
-                mail.Body = String.Format("Your login code is: <b>{0}</b>", message.HotpCode);
-                mail.IsBodyHtml = true;
-                await SmtpClientSender.SendMailMessage(mail);
-                this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
+                var apiKey = Environment.GetEnvironmentVariable("SendGridKey");
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress("mikemulchrone987@gmail.com", "Mike Mulchrone");
+                var subject = "Email 2FA - Encryption API Services";
+                var to = new EmailAddress(message.UserEmail);
+                var htmlContent = String.Format("Your login code is: <b>{0}</b>", message.HotpCode);
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, null, htmlContent);
+                var response = await client.SendEmailAsync(msg);
+                if (response.IsSuccessStatusCode)
+                {
+                    this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
+                }
             }
             catch (Exception ex)
             {

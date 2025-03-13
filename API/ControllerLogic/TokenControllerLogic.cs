@@ -1,5 +1,4 @@
-﻿using CasDotnetSdk.DigitalSignature.Types;
-using CasDotnetSdk.DigitalSignature;
+﻿using API.HelperServices;
 using CASHelpers;
 using CASHelpers.Types.HttpResponses.UserAuthentication;
 using Common;
@@ -11,9 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Models.UserAuthentication;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
-using System.Text.Json;
-using System.Runtime.CompilerServices;
-using API.HelperServices;
 
 namespace API.ControllerLogic
 {

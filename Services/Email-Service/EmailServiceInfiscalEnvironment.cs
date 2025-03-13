@@ -12,8 +12,8 @@ namespace Email_Service
             Environment.SetEnvironmentVariable("RabbitMqUrl", InfiscialEnvironment.GetSecretFromStorage("RABBITMQURL"));
             Environment.SetEnvironmentVariable("UserCollectionName", InfiscialEnvironment.GetSecretFromStorage("USERCOLLECTIONNAME"));
             Environment.SetEnvironmentVariable("Email", InfiscialEnvironment.GetSecretFromStorage("EMAIL"));
-            Environment.SetEnvironmentVariable("EmailPass", InfiscialEnvironment.GetSecretFromStorage("EMAILPASS"));
             Environment.SetEnvironmentVariable("Domain", InfiscialEnvironment.GetSecretFromStorage("DOMAIN"));
+            Environment.SetEnvironmentVariable("SendGridKey", InfiscialEnvironment.GetSecretFromStorage("SENDGRIDKEY"));
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using Common.Email;
-using Common.UniqueIdentifiers;
+﻿using Common.UniqueIdentifiers;
 using DataLayer.Mongo.Repositories;
 using DataLayer.RabbitMQ.QueueMessages;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
-using System.Net.Mail;
 using System.Text.Json;
 using static Common.UniqueIdentifiers.Generator;
 
@@ -40,18 +40,19 @@ namespace DataLayer.RabbitMQ
             {
                 LockedOutUserQueueMessage message = JsonSerializer.Deserialize<LockedOutUserQueueMessage>(e.Body.ToArray());
                 EmailToken emailToken = new Generator().GenerateEmailToken();
-
-                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-                SmtpServer.Port = 587;
-                using MailMessage mail = new MailMessage();
-                mail.From = new MailAddress("support@encryptionapiservices.com");
-                mail.To.Add(message.UserEmail);
-                mail.Subject = "Locked Out User Account - Encryption API Services";
-                mail.Body = "Your account has been locked out due to many failed login attempts.</br>" + String.Format("To unlock your account click <a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/unlock-account?id={0}&token={1}'>here</a>.", message.UserId, emailToken.UrlSignature);
-                mail.IsBodyHtml = true;
-                await SmtpClientSender.SendMailMessage(mail);
-                await this.userRepo.UpdateLockedOutUsersToken(message.UserId, emailToken.Base64HashedToken, emailToken.Base64PublicKey);
-                this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
+                var apiKey = Environment.GetEnvironmentVariable("SendGridKey");
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress("mikemulchrone987@gmail.com", "Mike Mulchrone");
+                var subject = "Locked Out User Account - Encryption API Services";
+                var to = new EmailAddress(message.UserEmail);
+                var htmlContent = "Your account has been locked out due to many failed login attempts.</br>" + String.Format("To unlock your account click <a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/unlock-account?id={0}&token={1}'>here</a>.", message.UserId, emailToken.UrlSignature);
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, null, htmlContent);
+                var response = await client.SendEmailAsync(msg);
+                if (response.IsSuccessStatusCode)
+                {
+                    await this.userRepo.UpdateLockedOutUsersToken(message.UserId, emailToken.Base64HashedToken, emailToken.Base64PublicKey);
+                    this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
+                }
             }
             catch (Exception ex)
             {

@@ -1,11 +1,11 @@
-﻿using Common.Email;
-using Common.UniqueIdentifiers;
+﻿using Common.UniqueIdentifiers;
 using DataLayer.Mongo.Repositories;
 using DataLayer.RabbitMQ.QueueMessages;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
-using System.Net.Mail;
 using System.Text.Json;
 using static Common.UniqueIdentifiers.Generator;
 
@@ -37,15 +37,19 @@ namespace DataLayer.RabbitMQ
             EmailToken emailToken = new Generator().GenerateEmailToken();
             try
             {
-                using MailMessage mail = new MailMessage();
-                mail.From = new MailAddress("support@encryptionapiservices.com");
-                mail.To.Add(message.UserEmail);
-                mail.Subject = "Forgot Password - Encryption API Services";
-                mail.Body = "If you did not ask to reset this password please delete this email.</br>" + String.Format("<a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/forgot-password/reset?id={0}&token={1}'>Click here to reset your password.</a>", message.UserId, emailToken.UrlSignature);
-                mail.IsBodyHtml = true;
-                await SmtpClientSender.SendMailMessage(mail);
-                await this._userRepository.UpdateUsersForgotPasswordToReset(message.UserId, emailToken.Base64HashedToken, emailToken.Base64PublicKey, emailToken.UrlSignature);
-                this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
+                var apiKey = Environment.GetEnvironmentVariable("SendGridKey");
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress("mikemulchrone987@gmail.com", "Mike Mulchrone");
+                var subject = "Forgot Password - Encryption API Services";
+                var to = new EmailAddress(message.UserEmail);
+                var htmlContent = "If you did not ask to reset this password please delete this email.</br>" + String.Format("<a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/forgot-password/reset?id={0}&token={1}'>Click here to reset your password.</a>", message.UserId, emailToken.UrlSignature);
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, null, htmlContent);
+                var response = await client.SendEmailAsync(msg);
+                if (response.IsSuccessStatusCode)
+                {
+                    await this._userRepository.UpdateUsersForgotPasswordToReset(message.UserId, emailToken.Base64HashedToken, emailToken.Base64PublicKey, emailToken.UrlSignature);
+                    this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
+                }
             }
             catch (Exception ex)
             {
