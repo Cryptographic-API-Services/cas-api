@@ -50,7 +50,9 @@ services:
 
   rabbit-mq:
     image: rabbitmq:3.13-management
+    hostname: rabbitmq
     ports:
     - "15672:15672"
     - "5672:5672" 
-    
+    volumes:
+    - "C:/RabbitMQ/:/var/lib/rabbitmq"
