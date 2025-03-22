@@ -1,4 +1,5 @@
 ﻿using Models.UserAuthentication;
+using System;
 
 namespace Validation.UserRegistration
 {
@@ -6,41 +7,36 @@ namespace Validation.UserRegistration
     {
         public bool IsRegisterUserModelValid(RegisterUser model)
         {
-            bool result = false;
-            if (this.IsUserNameValid(model.username) && this.IsPasswordValid(model.password) && this.IsEmailValid(model.email))
-            {
-                result = true;
-            }
-            return result;
+            return (this.IsUserNameValid(model.username) && this.IsPasswordValid(model.password) && this.IsEmailValid(model.email));
         }
 
         public bool IsEmailValid(string email)
         {
-            bool result = false;
-            if (this._emailRegex.IsMatch(email))
+            if (string.IsNullOrEmpty(email))
             {
-                result = true;
+                throw new Exception("Must provide an email to IsEmailValid function");
             }
-            return result;
+
+            return this._emailRegex.IsMatch(email);
         }
         public bool IsUserNameValid(string userName)
         {
-            bool result = false;
-            if (this._userRegex.IsMatch(userName))
+            if (string.IsNullOrEmpty(userName))
             {
-                result = true;
+                throw new Exception("Must provide an Username to IsUserName function");
             }
-            return result;
+
+            return this._userRegex.IsMatch(userName);
         }
 
         public bool IsPasswordValid(string password)
         {
-            bool result = false;
-            if (this._passwordRegex.IsMatch(password))
+            if (string.IsNullOrEmpty(password))
             {
-                result = true;
+                throw new Exception("Must provide an password to IsPassword function");
             }
-            return result;
+
+            return this._passwordRegex.IsMatch(password);
         }
     }
 }
