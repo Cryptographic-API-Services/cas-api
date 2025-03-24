@@ -1,8 +1,8 @@
-﻿using DataLayer.RabbitMQ.QueueMessages;
+﻿using Common.Email;
+using DataLayer.RabbitMQ.QueueMessages;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using SendGrid;
-using SendGrid.Helpers.Mail;
+using System.Collections.Generic;
 using System;
 using System.Text.Json;
 
@@ -32,19 +32,21 @@ namespace DataLayer.RabbitMQ
             EmergencyKitSendQueueMessage message = JsonSerializer.Deserialize<EmergencyKitSendQueueMessage>(e.Body.ToArray());
             try
             {
-                var apiKey = Environment.GetEnvironmentVariable("SendGridKey");
-                var client = new SendGridClient(apiKey);
-                var from = new EmailAddress("mikemulchrone987@gmail.com", "Mike Mulchrone");
-                var subject = "Emergency Kit - Encryption API Services";
-                var to = new EmailAddress(message.UserEmail);
+                var apiKey = Environment.GetEnvironmentVariable("EmailApi");
                 var htmlContent = "<html>" +
                     "<body>" +
                         "This is your emergency kit for account recovery if you completely forgot your password. Please store it in a safe place. Thanks for registering. <br>" + String.Format("Key: <b>{0}</b>", message.EncappedKey) +
                     "</body>" +
                     "</html>";
-                var msg = MailHelper.CreateSingleEmail(from, to, subject, null, htmlContent);
-                var response = await client.SendEmailAsync(msg);
-                if (response.IsSuccessStatusCode)
+                EmailRequestBody body = new EmailRequestBody()
+                {
+                    From = new EmailAddress("support@cryptographicapiservices.com"),
+                    To = new List<EmailAddress>() { new EmailAddress(message.UserEmail) },
+                    Subject = "Emergency Kit - Cryptographic API Services",
+                    Html = htmlContent
+                };
+                bool result = await EmailSender.SendEmail(apiKey, body);
+                if (result)
                 {
                     this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
                 }

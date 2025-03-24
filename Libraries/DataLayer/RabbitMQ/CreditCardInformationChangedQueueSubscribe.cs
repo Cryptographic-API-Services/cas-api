@@ -1,9 +1,11 @@
-﻿using DataLayer.RabbitMQ.QueueMessages;
+﻿using Common.Email;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using SendGrid;
-using SendGrid.Helpers.Mail;
+using static Common.UniqueIdentifiers.Generator;
+using System.Collections.Generic;
 using System;
+using DataLayer.RabbitMQ.QueueMessages;
 using System.Text.Json;
 
 namespace DataLayer.RabbitMQ
@@ -29,15 +31,17 @@ namespace DataLayer.RabbitMQ
         private async void CreditCardInformationChangedMessageReceived(object? sender, BasicDeliverEventArgs e)
         {
             CreditCardInformationChangedQueueMessage message = JsonSerializer.Deserialize<CreditCardInformationChangedQueueMessage>(e.Body.ToArray());
-            var apiKey = Environment.GetEnvironmentVariable("SendGridKey");
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("mikemulchrone987@gmail.com", "Mike Mulchrone");
-            var subject = "Credit Card Changed - Encryption API Services";
-            var to = new EmailAddress(message.UserEmail);
+            var apiKey = Environment.GetEnvironmentVariable("EmailApi");
             var htmlContent = "We noticed that you changed your credit card information recently. If this wasn't you we recommend changing your password " + String.Format("<a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/forgot-password'>here</a>");
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, null, htmlContent);
-            var response = await client.SendEmailAsync(msg);
-            if (response.IsSuccessStatusCode)
+            EmailRequestBody body = new EmailRequestBody()
+            {
+                From = new EmailAddress("support@cryptographicapiservices.com"),
+                To = new List<EmailAddress>() { new EmailAddress(message.UserEmail) },
+                Subject = "Credit Card Changed - Cryptographic API Services",
+                Html = htmlContent
+            };
+            bool result = await EmailSender.SendEmail(apiKey, body);
+            if (result)
             {
                 this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
             }

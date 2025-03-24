@@ -159,16 +159,7 @@ namespace API.ControllersLogic
                                 CreateTime = DateTime.UtcNow
                             };
                             await this._successfulLoginRepository.InsertSuccessfulLogin(login);
-                            ECDSAWrapper ecdsa = new ECDSAWrapper("ES521");
-                            string token = new JWT().GenerateECCToken(activeUser.Id, activeUser.IsAdmin, ecdsa, 1, activeUser.StripProductId);
-                            string publicKeyCacheKey = Constants.RedisKeys.UserTokenPublicKey + activeUser.Id;
-                            await this._userRepository.SetUserTokenPublicKey(activeUser.Id, ecdsa.PublicKey);
-                            this._redisClient.SetString(publicKeyCacheKey, ecdsa.PublicKey, new TimeSpan(1, 0, 0));
-                            string isUserActiveRedisKey = Constants.RedisKeys.IsActiveUser + activeUser.Id;
-                            this._redisClient.SetString(isUserActiveRedisKey, true.ToString(), new TimeSpan(1, 0, 0));
-                            string isUserAdminRedisKey = Constants.RedisKeys.IsUserAdmin + activeUser.Id;
-                            this._redisClient.SetString(isUserAdminRedisKey, activeUser.IsAdmin.ToString(), new TimeSpan(1, 0, 0));
-                            this._jwtPublicKeyTrustCertificate.CreatePublicKeyTrustCertificate(ecdsa.PublicKey, activeUser.Id);
+                            string token = await this.SuccessfulLoginTokenGeneration(activeUser);
                             result = new OkObjectResult(new { message = "You have successfully signed in.", token = token, TwoFactorAuth = false });
                         }
                     }
@@ -270,22 +261,17 @@ namespace API.ControllersLogic
                     bool isValid = hotp.VerifyHotp(body.HotpCode, databaseCode.Counter);
                     if (isValid)
                     {
-                        await this._hotpCodesRepository.UpdateHotpToVerified(databaseCode.Id);
-                        User activeUser = await this._userRepository.GetUserById(body.UserId);
-                        ECDSAWrapper ecdsa = new ECDSAWrapper("ES521");
-                        string token = new JWT().GenerateECCToken(activeUser.Id, activeUser.IsAdmin, ecdsa, 1, activeUser.StripProductId);
-                        string publicKeyCacheKey = Constants.RedisKeys.UserTokenPublicKey + activeUser.Id;
-                        this._redisClient.SetString(publicKeyCacheKey, ecdsa.PublicKey, new TimeSpan(1, 0, 0));
-                        await this._userRepository.SetUserTokenPublicKey(activeUser.Id, ecdsa.PublicKey);
-                        string isUserActiveRedisKey = Constants.RedisKeys.IsActiveUser + activeUser.Id;
-                        this._redisClient.SetString(isUserActiveRedisKey, true.ToString(), new TimeSpan(1, 0, 0));
+                        Task updateHotp = this._hotpCodesRepository.UpdateHotpToVerified(databaseCode.Id);
+                        Task<User> activeUser = this._userRepository.GetUserById(body.UserId);
+                        await Task.WhenAll(updateHotp, activeUser);
                         SuccessfulLogin login = new SuccessfulLogin()
                         {
-                            UserId = activeUser.Id,
+                            UserId = activeUser.Result.Id,
                             UserAgent = body.UserAgent,
                             CreateTime = DateTime.UtcNow
                         };
                         await this._successfulLoginRepository.InsertSuccessfulLogin(login);
+                        string token = await SuccessfulLoginTokenGeneration(activeUser.Result);
                         result = new OkObjectResult(new { message = "You have successfully verified your authentication code.", token = token });
                     }
                     else
@@ -309,6 +295,22 @@ namespace API.ControllersLogic
         }
 
         #endregion
+
+        private async Task<string> SuccessfulLoginTokenGeneration(User activeUser)
+        {
+            ECDSAWrapper ecdsa = new ECDSAWrapper("ES521");
+            string token = new JWT().GenerateECCToken(activeUser.Id, activeUser.IsAdmin, ecdsa, 1, activeUser.StripProductId);
+            string publicKeyCacheKey = Constants.RedisKeys.UserTokenPublicKey + activeUser.Id;
+            await this._userRepository.SetUserTokenPublicKey(activeUser.Id, ecdsa.PublicKey);
+            this._redisClient.SetString(publicKeyCacheKey, ecdsa.PublicKey, new TimeSpan(1, 0, 0));
+            string isUserActiveRedisKey = Constants.RedisKeys.IsActiveUser + activeUser.Id;
+            this._redisClient.SetString(isUserActiveRedisKey, true.ToString(), new TimeSpan(1, 0, 0));
+            string isUserAdminRedisKey = Constants.RedisKeys.IsUserAdmin + activeUser.Id;
+            this._redisClient.SetString(isUserAdminRedisKey, activeUser.IsAdmin.ToString(), new TimeSpan(1, 0, 0));
+            this._jwtPublicKeyTrustCertificate.CreatePublicKeyTrustCertificate(ecdsa.PublicKey, activeUser.Id);
+            return token;
+        }
+
 
         #region WasLoginMe
         public async Task<IActionResult> WasLoginMe(WasLoginMe body, HttpContext context)

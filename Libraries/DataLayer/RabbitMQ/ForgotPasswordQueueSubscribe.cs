@@ -1,10 +1,10 @@
-﻿using Common.UniqueIdentifiers;
+﻿using Common.Email;
+using Common.UniqueIdentifiers;
 using DataLayer.Mongo.Repositories;
 using DataLayer.RabbitMQ.QueueMessages;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using SendGrid;
-using SendGrid.Helpers.Mail;
+using System.Collections.Generic;
 using System;
 using System.Text.Json;
 using static Common.UniqueIdentifiers.Generator;
@@ -37,15 +37,17 @@ namespace DataLayer.RabbitMQ
             EmailToken emailToken = new Generator().GenerateEmailToken();
             try
             {
-                var apiKey = Environment.GetEnvironmentVariable("SendGridKey");
-                var client = new SendGridClient(apiKey);
-                var from = new EmailAddress("mikemulchrone987@gmail.com", "Mike Mulchrone");
-                var subject = "Forgot Password - Encryption API Services";
-                var to = new EmailAddress(message.UserEmail);
+                var apiKey = Environment.GetEnvironmentVariable("EmailApi");
                 var htmlContent = "If you did not ask to reset this password please delete this email.</br>" + String.Format("<a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/forgot-password/reset?id={0}&token={1}'>Click here to reset your password.</a>", message.UserId, emailToken.UrlSignature);
-                var msg = MailHelper.CreateSingleEmail(from, to, subject, null, htmlContent);
-                var response = await client.SendEmailAsync(msg);
-                if (response.IsSuccessStatusCode)
+                EmailRequestBody body = new EmailRequestBody()
+                {
+                    From = new EmailAddress("support@cryptographicapiservices.com"),
+                    To = new List<EmailAddress>() { new EmailAddress(message.UserEmail) },
+                    Subject = "Forgot Password - Cryptographic API Services",
+                    Html = htmlContent
+                };
+                bool result = await EmailSender.SendEmail(apiKey, body);
+                if (result)
                 {
                     await this._userRepository.UpdateUsersForgotPasswordToReset(message.UserId, emailToken.Base64HashedToken, emailToken.Base64PublicKey, emailToken.UrlSignature);
                     this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);

@@ -1,11 +1,11 @@
-﻿using Common.UniqueIdentifiers;
+﻿using Common.Email;
+using Common.UniqueIdentifiers;
 using DataLayer.Mongo.Repositories;
 using DataLayer.RabbitMQ.QueueMessages;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using static Common.UniqueIdentifiers.Generator;
 
@@ -40,15 +40,17 @@ namespace DataLayer.RabbitMQ
             {
                 LockedOutUserQueueMessage message = JsonSerializer.Deserialize<LockedOutUserQueueMessage>(e.Body.ToArray());
                 EmailToken emailToken = new Generator().GenerateEmailToken();
-                var apiKey = Environment.GetEnvironmentVariable("SendGridKey");
-                var client = new SendGridClient(apiKey);
-                var from = new EmailAddress("mikemulchrone987@gmail.com", "Mike Mulchrone");
-                var subject = "Locked Out User Account - Encryption API Services";
-                var to = new EmailAddress(message.UserEmail);
+                var apiKey = Environment.GetEnvironmentVariable("EmailApi");
                 var htmlContent = "Your account has been locked out due to many failed login attempts.</br>" + String.Format("To unlock your account click <a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/unlock-account?id={0}&token={1}'>here</a>.", message.UserId, emailToken.UrlSignature);
-                var msg = MailHelper.CreateSingleEmail(from, to, subject, null, htmlContent);
-                var response = await client.SendEmailAsync(msg);
-                if (response.IsSuccessStatusCode)
+                EmailRequestBody body = new EmailRequestBody()
+                {
+                    From = new EmailAddress("support@cryptographicapiservices.com"),
+                    To = new List<EmailAddress>() { new EmailAddress(message.UserEmail) },
+                    Subject = "Locked Out User Account - Cryptographic API Services",
+                    Html = htmlContent
+                };
+                bool result = await EmailSender.SendEmail(apiKey, body);
+                if (result)
                 {
                     await this.userRepo.UpdateLockedOutUsersToken(message.UserId, emailToken.Base64HashedToken, emailToken.Base64PublicKey);
                     this.Channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
