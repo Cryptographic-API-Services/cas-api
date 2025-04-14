@@ -31,12 +31,12 @@ namespace DataLayer.RabbitMQ
         private async void CreditCardInformationChangedMessageReceived(object? sender, BasicDeliverEventArgs e)
         {
             CreditCardInformationChangedQueueMessage message = JsonSerializer.Deserialize<CreditCardInformationChangedQueueMessage>(e.Body.ToArray());
-            var apiKey = Environment.GetEnvironmentVariable("EmailApi");
+            var apiKey = Environment.GetEnvironmentVariable("Resender");
             var htmlContent = "We noticed that you changed your credit card information recently. If this wasn't you we recommend changing your password " + String.Format("<a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/forgot-password'>here</a>");
             EmailRequestBody body = new EmailRequestBody()
             {
-                From = new EmailAddress("support@cryptographicapiservices.com"),
-                To = new List<EmailAddress>() { new EmailAddress(message.UserEmail) },
+                From = "support@cryptographicapiservices.com",
+                To = new List<string>() { message.UserEmail },
                 Subject = "Credit Card Changed - Cryptographic API Services",
                 Html = htmlContent
             };

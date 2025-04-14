@@ -31,12 +31,12 @@ namespace DataLayer.RabbitMQ
             EmergencyKitRecoveryQueueMessage message = JsonSerializer.Deserialize<EmergencyKitRecoveryQueueMessage>(e.Body.ToArray());
             try
             {
-                var apiKey = Environment.GetEnvironmentVariable("EmailApi");
+                var apiKey = Environment.GetEnvironmentVariable("Resender");
                 var htmlContent = String.Format("Your account has been unlocked and the new password is: <b>{0}</b>", message.NewPassword);
                 EmailRequestBody body = new EmailRequestBody()
                 {
-                    From = new EmailAddress("support@cryptographicapiservices.com"),
-                    To = new List<EmailAddress>() { new EmailAddress(message.UserEmail) },
+                    From = new string("support@cryptographicapiservices.com"),
+                    To = new List<string>() { new string(message.UserEmail) },
                     Subject = "Emergency Kit Recovery - Cryptographic API Services",
                     Html = htmlContent
                 };

@@ -13,7 +13,7 @@ namespace Email_Service
             Environment.SetEnvironmentVariable("UserCollectionName", InfiscialEnvironment.GetSecretFromStorage("USERCOLLECTIONNAME"));
             Environment.SetEnvironmentVariable("EmailApi", InfiscialEnvironment.GetSecretFromStorage("EMAILAPI"));
             Environment.SetEnvironmentVariable("Domain", InfiscialEnvironment.GetSecretFromStorage("DOMAIN"));
-            Environment.SetEnvironmentVariable("SendGridKey", InfiscialEnvironment.GetSecretFromStorage("SENDGRIDKEY"));
+            Environment.SetEnvironmentVariable("Resender", InfiscialEnvironment.GetSecretFromStorage("RESENDER"));
         }
     }
 }

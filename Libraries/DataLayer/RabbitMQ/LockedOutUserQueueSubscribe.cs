@@ -40,12 +40,12 @@ namespace DataLayer.RabbitMQ
             {
                 LockedOutUserQueueMessage message = JsonSerializer.Deserialize<LockedOutUserQueueMessage>(e.Body.ToArray());
                 EmailToken emailToken = new Generator().GenerateEmailToken();
-                var apiKey = Environment.GetEnvironmentVariable("EmailApi");
+                var apiKey = Environment.GetEnvironmentVariable("Resender");
                 var htmlContent = "Your account has been locked out due to many failed login attempts.</br>" + String.Format("To unlock your account click <a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/unlock-account?id={0}&token={1}'>here</a>.", message.UserId, emailToken.UrlSignature);
                 EmailRequestBody body = new EmailRequestBody()
                 {
-                    From = new EmailAddress("support@cryptographicapiservices.com"),
-                    To = new List<EmailAddress>() { new EmailAddress(message.UserEmail) },
+                    From = "support@cryptographicapiservices.com",
+                    To = new List<string>() { new string(message.UserEmail) },
                     Subject = "Locked Out User Account - Cryptographic API Services",
                     Html = htmlContent
                 };

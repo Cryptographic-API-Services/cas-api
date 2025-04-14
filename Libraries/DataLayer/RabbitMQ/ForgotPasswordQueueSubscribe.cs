@@ -37,12 +37,12 @@ namespace DataLayer.RabbitMQ
             EmailToken emailToken = new Generator().GenerateEmailToken();
             try
             {
-                var apiKey = Environment.GetEnvironmentVariable("EmailApi");
+                var apiKey = Environment.GetEnvironmentVariable("Resender");
                 var htmlContent = "If you did not ask to reset this password please delete this email.</br>" + String.Format("<a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/forgot-password/reset?id={0}&token={1}'>Click here to reset your password.</a>", message.UserId, emailToken.UrlSignature);
                 EmailRequestBody body = new EmailRequestBody()
                 {
-                    From = new EmailAddress("support@cryptographicapiservices.com"),
-                    To = new List<EmailAddress>() { new EmailAddress(message.UserEmail) },
+                    From = new string("support@cryptographicapiservices.com"),
+                    To = new List<string>() { new string(message.UserEmail) },
                     Subject = "Forgot Password - Cryptographic API Services",
                     Html = htmlContent
                 };

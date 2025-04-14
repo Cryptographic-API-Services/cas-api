@@ -32,7 +32,7 @@ namespace DataLayer.RabbitMQ
             EmergencyKitSendQueueMessage message = JsonSerializer.Deserialize<EmergencyKitSendQueueMessage>(e.Body.ToArray());
             try
             {
-                var apiKey = Environment.GetEnvironmentVariable("EmailApi");
+                var apiKey = Environment.GetEnvironmentVariable("Resender");
                 var htmlContent = "<html>" +
                     "<body>" +
                         "This is your emergency kit for account recovery if you completely forgot your password. Please store it in a safe place. Thanks for registering. <br>" + String.Format("Key: <b>{0}</b>", message.EncappedKey) +
@@ -40,8 +40,8 @@ namespace DataLayer.RabbitMQ
                     "</html>";
                 EmailRequestBody body = new EmailRequestBody()
                 {
-                    From = new EmailAddress("support@cryptographicapiservices.com"),
-                    To = new List<EmailAddress>() { new EmailAddress(message.UserEmail) },
+                    From = new string("support@cryptographicapiservices.com"),
+                    To = new List<string>() { new string(message.UserEmail) },
                     Subject = "Emergency Kit - Cryptographic API Services",
                     Html = htmlContent
                 };

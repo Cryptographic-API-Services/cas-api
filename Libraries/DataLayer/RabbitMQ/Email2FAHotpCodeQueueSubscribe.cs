@@ -33,12 +33,12 @@ namespace DataLayer.RabbitMQ
             try
             {
                 Email2FAHotpCodeQueueMessage message = JsonSerializer.Deserialize<Email2FAHotpCodeQueueMessage>(e.Body.ToArray());
-                var apiKey = Environment.GetEnvironmentVariable("EmailApi");
+                var apiKey = Environment.GetEnvironmentVariable("Resender");
                 var htmlContent = String.Format("Your login code is: <b>{0}</b>", message.HotpCode);
                 EmailRequestBody body = new EmailRequestBody()
                 {
-                    From = new EmailAddress("support@cryptographicapiservices.com"),
-                    To = new List<EmailAddress>() { new EmailAddress(message.UserEmail) },
+                    From = new string("support@cryptographicapiservices.com"),
+                    To = new List<string>() { new string(message.UserEmail) },
                     Subject = "Email 2FA - Cryptographic API Services",
                     Html = htmlContent
                 };

@@ -37,12 +37,12 @@ namespace DataLayer.RabbitMQ
             EmailToken emailToken = new Generator().GenerateEmailToken();
             try
             {
-                var apiKey = Environment.GetEnvironmentVariable("EmailApi");
+                var apiKey = Environment.GetEnvironmentVariable("Resender");
                 var htmlContent = "We are excited to have you here </br>" + String.Format("<a href='" + Environment.GetEnvironmentVariable("Domain") + "/#/activate?id={0}&token={1}'>Click here to activate</a>", message.UserId, emailToken.UrlSignature);
                 EmailRequestBody body = new EmailRequestBody()
                 {
-                    From = new EmailAddress("support@cryptographicapiservices.com"),
-                    To = new List<EmailAddress>() { new EmailAddress(message.UserEmail) },
+                    From = "support@cryptographicapiservices.com",
+                    To = new List<string>() { message.UserEmail },
                     Subject = "Account Activation - Cryptographic API Services",
                     Html = htmlContent
                 };
