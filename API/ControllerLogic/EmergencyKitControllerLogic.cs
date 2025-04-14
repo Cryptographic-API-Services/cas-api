@@ -1,4 +1,7 @@
-﻿using CasDotnetSdk.Hybrid;
+﻿using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using CasDotnetSdk.Hybrid;
 using CasDotnetSdk.PasswordHashers;
 using Common;
 using Common.UniqueIdentifiers;
@@ -9,9 +12,6 @@ using DataLayer.RabbitMQ;
 using DataLayer.RabbitMQ.QueueMessages;
 using Microsoft.AspNetCore.Mvc;
 using Models.EmergencyKit;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
 
 namespace API.ControllerLogic
 {

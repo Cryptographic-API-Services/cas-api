@@ -1,4 +1,6 @@
-﻿using CasDotnetSdk.KeyExchange;
+﻿using System.Reflection;
+using System.Text.Json;
+using CasDotnetSdk.KeyExchange;
 using CasDotnetSdk.KeyExchange.Types;
 using CasDotnetSdk.Symmetric;
 using CasDotnetSdk.Symmetric.Types;
@@ -10,8 +12,6 @@ using DataLayer.Mongo.Repositories;
 using DataLayer.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Models.UserAuthentication.AuthenticationController;
-using System.Reflection;
-using System.Text.Json;
 
 namespace API.ControllerLogic
 {

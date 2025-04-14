@@ -1,4 +1,6 @@
-﻿using CasDotnetSdk.DigitalSignature;
+﻿using System.Reflection;
+using System.Text;
+using CasDotnetSdk.DigitalSignature;
 using CASHelpers;
 using Common;
 using DataLayer.Cache;
@@ -8,8 +10,6 @@ using DataLayer.Mongo.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Models.Payments;
 using Payments;
-using System.Reflection;
-using System.Text;
 
 namespace API.ControllerLogic
 {

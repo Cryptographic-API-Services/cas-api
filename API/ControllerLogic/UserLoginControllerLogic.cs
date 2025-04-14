@@ -1,4 +1,7 @@
-﻿using API.HelperServices;
+﻿using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using API.HelperServices;
 using CasDotnetSdk.PasswordHashers;
 using CasDotnetSdk.Signatures;
 using CASHelpers;
@@ -14,9 +17,6 @@ using Microsoft.IdentityModel.Tokens;
 using Models.UserAuthentication;
 using MongoDB.Driver;
 using OtpNet;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
 
 namespace API.ControllersLogic
 {

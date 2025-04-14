@@ -1,4 +1,9 @@
-﻿using CasDotnetSdk.DigitalSignature;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CasDotnetSdk.DigitalSignature;
 using CasDotnetSdk.DigitalSignature.Types;
 using Common.EmergencyKit;
 using Common.UniqueIdentifiers;
@@ -9,11 +14,6 @@ using Models.UserAuthentication;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer.Mongo.Repositories
 {

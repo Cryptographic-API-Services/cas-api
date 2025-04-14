@@ -1,4 +1,7 @@
-﻿using CasDotnetSdk.Symmetric;
+﻿using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using CasDotnetSdk.Symmetric;
 using CasDotnetSdk.Symmetric.Types;
 using CASHelpers;
 using CASHelpers.Types.HttpResponses.BenchmarkAPI;
@@ -8,9 +11,6 @@ using DataLayer.Mongo.Repositories;
 using DataLayer.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Models.BenchmarkSDKSend;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
 
 namespace API.ControllerLogic
 {

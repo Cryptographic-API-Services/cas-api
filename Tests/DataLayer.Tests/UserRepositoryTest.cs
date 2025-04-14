@@ -1,11 +1,11 @@
-﻿using CasDotnetSdk.PasswordHashers;
+﻿using System;
+using System.Threading.Tasks;
+using CasDotnetSdk.PasswordHashers;
 using DataLayer.Mongo;
 using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using Models.UserAuthentication;
 using MongoDB.Driver;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Priority;
 

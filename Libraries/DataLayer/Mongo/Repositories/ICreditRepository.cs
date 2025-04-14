@@ -1,5 +1,5 @@
-﻿using DataLayer.Mongo.Entities;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using DataLayer.Mongo.Entities;
 
 namespace DataLayer.Mongo.Repositories
 {

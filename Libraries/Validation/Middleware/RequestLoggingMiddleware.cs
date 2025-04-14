@@ -1,14 +1,13 @@
-﻿using CASHelpers;
-using DataLayer.Mongo.Entities;
-using DataLayer.RabbitMQ;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using CASHelpers;
+using DataLayer.Mongo.Entities;
+using DataLayer.RabbitMQ;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Validation.Networking;
 
 namespace Validation.Middleware

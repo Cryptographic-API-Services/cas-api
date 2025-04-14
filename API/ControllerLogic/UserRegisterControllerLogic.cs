@@ -1,4 +1,7 @@
-﻿using API.ControllersLogic;
+﻿using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using API.ControllersLogic;
 using CasDotnetSdk.Asymmetric;
 using CasDotnetSdk.PasswordHashers;
 using CasDotnetSdk.Signatures;
@@ -13,9 +16,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Models.UserAuthentication;
 using Payments;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
 using Validation.UserRegistration;
 using User = DataLayer.Mongo.Entities.User;
 

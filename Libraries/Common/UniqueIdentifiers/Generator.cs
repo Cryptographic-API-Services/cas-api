@@ -1,10 +1,10 @@
-﻿using CasDotnetSdk.Hashers;
+﻿using System;
+using System.Linq;
+using System.Text;
+using CasDotnetSdk.Hashers;
 using CasDotnetSdk.Signatures;
 using CasDotnetSdk.Signatures.Types;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Linq;
-using System.Text;
 
 namespace Common.UniqueIdentifiers
 {

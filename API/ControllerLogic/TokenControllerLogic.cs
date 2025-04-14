@@ -1,4 +1,6 @@
-﻿using API.HelperServices;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
+using API.HelperServices;
 using CASHelpers;
 using CASHelpers.Types.HttpResponses.UserAuthentication;
 using Common;
@@ -8,8 +10,6 @@ using DataLayer.Mongo.Repositories;
 using DataLayer.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Models.UserAuthentication;
-using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
 
 namespace API.ControllerLogic
 {

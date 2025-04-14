@@ -1,4 +1,5 @@
-﻿using CasDotnetSdk.PasswordHashers;
+﻿using System.Reflection;
+using CasDotnetSdk.PasswordHashers;
 using CASHelpers;
 using Common;
 using DataLayer.Cache;
@@ -6,7 +7,6 @@ using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Models.UserAuthentication;
-using System.Reflection;
 using Validation.UserSettings;
 
 namespace API.ControllerLogic

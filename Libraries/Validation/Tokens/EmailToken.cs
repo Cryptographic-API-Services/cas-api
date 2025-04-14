@@ -1,8 +1,8 @@
-﻿using CasDotnetSdk.Hashers;
+﻿using System;
+using System.Text;
+using CasDotnetSdk.Hashers;
 using CasDotnetSdk.Signatures;
 using CasDotnetSdk.Signatures.Types;
-using System;
-using System.Text;
 
 namespace Validation.Tokens
 {

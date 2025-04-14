@@ -1,4 +1,7 @@
-﻿using CASHelpers;
+﻿using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using CASHelpers;
 using Common;
 using DataLayer.Cache;
 using DataLayer.Mongo.Entities;
@@ -9,9 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using Models.Credit;
 using Payments;
 using Stripe;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
 using Validation.CreditCard;
 
 namespace API.ControllersLogic

@@ -1,4 +1,7 @@
-﻿using CasDotnetSdk.PasswordHashers;
+﻿using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using CasDotnetSdk.PasswordHashers;
 using CasDotnetSdk.Signatures;
 using Common;
 using DataLayer.Cache;
@@ -8,9 +11,6 @@ using DataLayer.RabbitMQ.QueueMessages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Models.UserAuthentication;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
 using Validation.UserRegistration;
 using User = DataLayer.Mongo.Entities.User;
 

@@ -1,11 +1,11 @@
-﻿using CASHelpers;
+﻿using System.Reflection;
+using CASHelpers;
 using Common;
 using DataLayer.Cache;
 using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Models.TwoFactorAuthentication;
-using System.Reflection;
 using Validation.Phone;
 
 namespace API.ControllersLogic

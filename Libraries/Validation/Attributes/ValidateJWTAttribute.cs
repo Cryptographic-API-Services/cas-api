@@ -1,4 +1,9 @@
-﻿using CasDotnetSdk.DigitalSignature;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using CasDotnetSdk.DigitalSignature;
 using CasDotnetSdk.DigitalSignature.Types;
 using CASHelpers;
 using DataLayer.Mongo.Entities;
@@ -6,11 +11,6 @@ using DataLayer.Mongo.Repositories;
 using DataLayer.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
 
 namespace Validation.Attributes
 {

@@ -1,5 +1,5 @@
-﻿using Infisical.Sdk;
-using System;
+﻿using System;
+using Infisical.Sdk;
 
 namespace DataLayer.Infiscial
 {

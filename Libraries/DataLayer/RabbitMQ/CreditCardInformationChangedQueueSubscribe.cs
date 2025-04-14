@@ -1,12 +1,10 @@
-﻿using Common.Email;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using Common.Email;
+using DataLayer.RabbitMQ.QueueMessages;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using static Common.UniqueIdentifiers.Generator;
-using System.Collections.Generic;
-using System;
-using DataLayer.RabbitMQ.QueueMessages;
-using System.Text.Json;
 
 namespace DataLayer.RabbitMQ
 {

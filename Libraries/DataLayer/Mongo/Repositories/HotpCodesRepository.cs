@@ -1,8 +1,8 @@
-﻿using DataLayer.Mongo.Entities;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using DataLayer.Mongo.Entities;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DataLayer.Mongo.Repositories
 {

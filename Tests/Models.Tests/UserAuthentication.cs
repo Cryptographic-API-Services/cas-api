@@ -1,5 +1,5 @@
-﻿using Models.UserAuthentication;
-using System;
+﻿using System;
+using Models.UserAuthentication;
 using Xunit;
 
 namespace Models.Tests

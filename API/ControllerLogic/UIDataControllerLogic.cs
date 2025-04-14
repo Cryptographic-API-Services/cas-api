@@ -1,9 +1,9 @@
-﻿using Common;
+﻿using System.Reflection;
+using Common;
 using DataLayer.Cache;
 using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
 
 namespace API.ControllerLogic
 {

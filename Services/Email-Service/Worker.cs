@@ -1,7 +1,7 @@
-using DataLayer.RabbitMQ;
-using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
+using DataLayer.RabbitMQ;
+using Microsoft.Extensions.Hosting;
 
 namespace Email_Service
 {
