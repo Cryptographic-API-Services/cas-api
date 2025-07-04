@@ -1,11 +1,9 @@
-﻿using System.Reflection;
-using CASHelpers;
-using Common;
-using DataLayer.Cache;
+﻿using CASHelpers;
 using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Models.TwoFactorAuthentication;
+using System.Reflection;
 using Validation.Phone;
 
 namespace API.ControllersLogic
@@ -14,20 +12,20 @@ namespace API.ControllersLogic
     {
         private readonly IUserRepository _userRepository;
         private readonly ICASExceptionRepository _exceptionRepository;
-        private readonly BenchmarkMethodCache _benchMarkMethodCache;
+
         public TwoFAControllerLogic(
             IUserRepository userRepository,
-            ICASExceptionRepository exceptionRepository,
-            BenchmarkMethodCache benchmarkMethodCache)
+            ICASExceptionRepository exceptionRepository
+            )
         {
             this._userRepository = userRepository;
             this._exceptionRepository = exceptionRepository;
-            this._benchMarkMethodCache = benchmarkMethodCache;
+
         }
 
         public async Task<IActionResult> Get2FAStatus(HttpContext httpContext)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(httpContext);
+
             IActionResult result = null;
             try
             {
@@ -39,14 +37,14 @@ namespace API.ControllersLogic
             {
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
 
         public async Task<IActionResult> PhoneNumberUpdate(UpdatePhoneNumber body, HttpContext httpContext)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(httpContext);
+
             IActionResult result = null;
             try
             {
@@ -67,14 +65,14 @@ namespace API.ControllersLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end." });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
 
         public async Task<IActionResult> TurnOff2FA(HttpContext httpContext)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(httpContext);
+
             IActionResult result = null;
             try
             {
@@ -87,14 +85,14 @@ namespace API.ControllersLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end." });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
 
         public async Task<IActionResult> TurnOn2FA(HttpContext httpContext)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(httpContext);
+
             IActionResult result = null;
             try
             {
@@ -107,8 +105,8 @@ namespace API.ControllersLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end." });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
     }

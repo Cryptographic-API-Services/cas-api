@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using DataLayer.Mongo.Entities;
+﻿using DataLayer.Mongo.Entities;
 using Models.Payments;
 using Stripe;
+using System;
+using System.Threading.Tasks;
 
 namespace Payments
 {

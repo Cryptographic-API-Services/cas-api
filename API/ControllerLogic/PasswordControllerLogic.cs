@@ -1,16 +1,14 @@
-﻿using System.Reflection;
-using System.Text;
-using System.Text.Json;
-using CasDotnetSdk.PasswordHashers;
+﻿using CasDotnetSdk.PasswordHashers;
 using CasDotnetSdk.Signatures;
-using Common;
-using DataLayer.Cache;
 using DataLayer.Mongo.Repositories;
 using DataLayer.RabbitMQ;
 using DataLayer.RabbitMQ.QueueMessages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Models.UserAuthentication;
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
 using Validation.UserRegistration;
 using User = DataLayer.Mongo.Entities.User;
 
@@ -21,27 +19,27 @@ namespace API.ControllersLogic
         private readonly IUserRepository _userRepository;
         private readonly IForgotPasswordRepository _forgotPasswordRepository;
         private readonly ICASExceptionRepository _exceptionRepository;
-        private readonly BenchmarkMethodCache _benchMarkMethodCache;
+
         private readonly ForgotPasswordQueuePublish _forgotPasswordQueue;
         public PasswordControllerLogic(
             IUserRepository userRepository,
             IForgotPasswordRepository forgotPasswordRepository,
             ICASExceptionRepository exceptionRepository,
-            BenchmarkMethodCache benchMarkMethodCache,
+
             ForgotPasswordQueuePublish forgotPasswordQueue
             )
         {
             this._userRepository = userRepository;
             this._forgotPasswordRepository = forgotPasswordRepository;
             this._exceptionRepository = exceptionRepository;
-            this._benchMarkMethodCache = benchMarkMethodCache;
+
             this._forgotPasswordQueue = forgotPasswordQueue;
         }
 
         #region ForgotPassword
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest body, HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -63,8 +61,8 @@ namespace API.ControllersLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end" });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
         #endregion
@@ -72,7 +70,7 @@ namespace API.ControllersLogic
         #region ResetPassword
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest body, HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -103,8 +101,8 @@ namespace API.ControllersLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end" });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
         #endregion

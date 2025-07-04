@@ -1,42 +1,40 @@
-﻿using System.Reflection;
-using System.Text;
-using System.Text.Json;
-using CasDotnetSdk.Hybrid;
+﻿using CasDotnetSdk.Hybrid;
 using CasDotnetSdk.PasswordHashers;
-using Common;
 using Common.UniqueIdentifiers;
-using DataLayer.Cache;
 using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using DataLayer.RabbitMQ;
 using DataLayer.RabbitMQ.QueueMessages;
 using Microsoft.AspNetCore.Mvc;
 using Models.EmergencyKit;
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
 
 namespace API.ControllerLogic
 {
     public class EmergencyKitControllerLogic : IEmergencyKitControllerLogic
     {
         private readonly ICASExceptionRepository _exceptionRepostory;
-        private readonly BenchmarkMethodCache _benchMarkMethodCache;
+
         private readonly IUserRepository _userRepository;
         private readonly EmergencyKitRecoveryPublish _emgerencyKitRecovery;
         public EmergencyKitControllerLogic(
              ICASExceptionRepository exceptionRepostory,
-             BenchmarkMethodCache benchMarkMethodCache,
+
              IUserRepository userRepository,
              EmergencyKitRecoveryPublish emgerencyKitRecovery
             )
         {
             this._exceptionRepostory = exceptionRepostory;
-            this._benchMarkMethodCache = benchMarkMethodCache;
+
             this._userRepository = userRepository;
             this._emgerencyKitRecovery = emgerencyKitRecovery;
         }
 
         public async Task<IActionResult> RecoverProfile(HttpContext context, EmgerencyKitRecoverProfileRequest request)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             try
             {
                 // TODO: email regex is acting up, put in validation of a valid email
@@ -74,8 +72,8 @@ namespace API.ControllerLogic
                 await this._exceptionRepostory.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 return new BadRequestObjectResult(new { error = "There was an error on our end recovering your account" });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return new OkResult();
         }
     }

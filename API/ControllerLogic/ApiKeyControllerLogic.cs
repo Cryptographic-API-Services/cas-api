@@ -1,32 +1,30 @@
-﻿using System.Reflection;
-using CASHelpers;
-using Common;
+﻿using CASHelpers;
 using Common.UniqueIdentifiers;
-using DataLayer.Cache;
 using DataLayer.Mongo.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace API.ControllerLogic
 {
     public class ApiKeyControllerLogic : IApiKeyControllerLogic
     {
         private readonly ICASExceptionRepository _exceptionRepository;
-        private readonly BenchmarkMethodCache _benchMarkMethodCache;
+
         private readonly IUserRepository _userRepository;
         public ApiKeyControllerLogic(
             ICASExceptionRepository exceptionRepository,
-            BenchmarkMethodCache benchMarkMethodCache,
+
             IUserRepository userRepository
             )
         {
             this._exceptionRepository = exceptionRepository;
-            this._benchMarkMethodCache = benchMarkMethodCache;
+
             this._userRepository = userRepository;
         }
 
         public async Task<IActionResult> RegenerateApiKey(HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -41,8 +39,8 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end" });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
     }

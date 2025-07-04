@@ -46,7 +46,6 @@ namespace Controllers.Tests
             this._tokenController = new TokenController(mockHttpContextAccessor.Object, new TokenControllerLogic(
                 new UserRepository(databaseSettings, client),
                 new CASExceptionRepository(databaseSettings, client),
-                new DataLayer.Cache.BenchmarkMethodCache(databaseSettings, client),
                 redisClient,
                 new JWTPublicKeyTrustCertificate(redisClient)));
         }

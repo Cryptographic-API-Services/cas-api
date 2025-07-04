@@ -1,9 +1,9 @@
-﻿using System;
-using System.Text.Json;
-using DataLayer.Mongo.Entities;
+﻿using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System;
+using System.Text.Json;
 
 namespace DataLayer.RabbitMQ
 {

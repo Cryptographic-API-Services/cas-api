@@ -1,12 +1,7 @@
-﻿using System.Reflection;
-using System.Text;
-using System.Text.Json;
-using API.HelperServices;
+﻿using API.HelperServices;
 using CasDotnetSdk.PasswordHashers;
 using CasDotnetSdk.Signatures;
 using CASHelpers;
-using Common;
-using DataLayer.Cache;
 using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using DataLayer.RabbitMQ;
@@ -17,6 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 using Models.UserAuthentication;
 using MongoDB.Driver;
 using OtpNet;
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
 
 namespace API.ControllersLogic
 {
@@ -27,7 +25,7 @@ namespace API.ControllersLogic
         private readonly IHotpCodesRepository _hotpCodesRepository;
         private readonly ISuccessfulLoginRepository _successfulLoginRepository;
         private readonly ICASExceptionRepository _exceptionRepository;
-        private readonly BenchmarkMethodCache _benchMarkMethodCache;
+
         private readonly LockedOutUserQueuePublish _lockedOutUserQueue;
         private readonly Email2FAHotpCodeQueuePublish _email2FAHotpCodeQueuePublish;
         private readonly IRedisClient _redisClient;
@@ -39,7 +37,7 @@ namespace API.ControllersLogic
             IHotpCodesRepository hotpCodesRepository,
             ISuccessfulLoginRepository successfulLoginRepository,
             ICASExceptionRepository exceptionRepository,
-            BenchmarkMethodCache benchmarkMethodCache,
+
             LockedOutUserQueuePublish lockedOutUserQueue,
             Email2FAHotpCodeQueuePublish email2FAHotpCodeQueuePublish,
             IRedisClient redisCLient,
@@ -51,7 +49,7 @@ namespace API.ControllersLogic
             this._hotpCodesRepository = hotpCodesRepository;
             this._successfulLoginRepository = successfulLoginRepository;
             this._exceptionRepository = exceptionRepository;
-            this._benchMarkMethodCache = benchmarkMethodCache;
+
             this._lockedOutUserQueue = lockedOutUserQueue;
             this._email2FAHotpCodeQueuePublish = email2FAHotpCodeQueuePublish;
             this._redisClient = redisCLient;
@@ -61,7 +59,7 @@ namespace API.ControllersLogic
         #region GetApiKey
         public async Task<IActionResult> GetApiKey(HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -74,8 +72,8 @@ namespace API.ControllersLogic
             {
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
         #endregion
@@ -83,7 +81,7 @@ namespace API.ControllersLogic
         #region GetSuccessfulLogins
         public async Task<IActionResult> GetSuccessfulLogins(HttpContext context, int pageSkip, int pageSize)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -99,8 +97,8 @@ namespace API.ControllersLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end getting the recent login activity." });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
         #endregion
@@ -108,7 +106,7 @@ namespace API.ControllersLogic
         #region LoginUser
         public async Task<IActionResult> LoginUser(LoginUser body, HttpContext httpContext)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(httpContext);
+
             IActionResult result = null;
             try
             {
@@ -201,8 +199,8 @@ namespace API.ControllersLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "Something went wrong on our end. Please try again." });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
         #endregion
@@ -210,7 +208,7 @@ namespace API.ControllersLogic
         #region UnlockUser
         public async Task<IActionResult> UnlockUser(UnlockUser body, HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -240,8 +238,8 @@ namespace API.ControllersLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our side" });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
         #endregion
@@ -249,7 +247,7 @@ namespace API.ControllersLogic
         #region ValidateHotpCode 
         public async Task<IActionResult> ValidateHotpCode([FromBody] ValidateHotpCode body, HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -289,8 +287,8 @@ namespace API.ControllersLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our side" });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
 
@@ -315,7 +313,7 @@ namespace API.ControllersLogic
         #region WasLoginMe
         public async Task<IActionResult> WasLoginMe(WasLoginMe body, HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -326,8 +324,8 @@ namespace API.ControllersLogic
             {
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
         #endregion

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using CasDotnetSdk.PasswordHashers;
+﻿using CasDotnetSdk.PasswordHashers;
 using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using Models.UserAuthentication;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Validation.UserSettings
 {

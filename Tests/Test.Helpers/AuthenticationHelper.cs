@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using CASHelpers;
+﻿using CASHelpers;
+using System.Threading.Tasks;
 
 namespace Tests.Helpers
 {
