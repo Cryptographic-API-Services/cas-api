@@ -14,27 +14,27 @@ namespace API.ControllerLogic
         private readonly IUserRepository _userRepository;
         private readonly ICASExceptionRepository _exceptionRepository;
         private readonly IForgotPasswordRepository _forgotPasswordRepository;
-        private readonly BenchmarkMethodCache _benchMarkMethodCache;
+        
         private readonly UserSettingsValidation _userSettingsValidation;
         public UserSettingsControllerLogic(
             IUserRepository userRepository,
             ICASExceptionRepository exceptionRepository,
             IForgotPasswordRepository forgotPasswordRepository,
-            BenchmarkMethodCache benchmarkMethodCache,
+            
             UserSettingsValidation userSettingsValidation
             )
         {
             this._userRepository = userRepository;
             this._exceptionRepository = exceptionRepository;
             this._forgotPasswordRepository = forgotPasswordRepository;
-            this._benchMarkMethodCache = benchmarkMethodCache;
+            
             this._userSettingsValidation = userSettingsValidation;
         }
 
         #region ChangeUsername
         public async Task<IActionResult> ChangeUsername(HttpContext context, ChangeUserName changeUsername)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+            
             IActionResult result = null;
             try
             {
@@ -54,8 +54,8 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end updating your user name" });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+            
+            
             return result;
         }
         #endregion
@@ -63,7 +63,7 @@ namespace API.ControllerLogic
         #region ChangePassword
         public async Task<IActionResult> ChangePassword(HttpContext context, ChangePassword changePassword)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+            
             IActionResult result = null;
             try
             {
@@ -89,8 +89,8 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end changing your password" });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+            
+            
             return result;
         }
 

@@ -20,14 +20,12 @@ namespace API.ControllersLogic
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserRepository _userRepository;
         private readonly ICASExceptionRepository _exceptionRepository;
-        private readonly BenchmarkMethodCache _benchmarkMethodCache;
         private readonly CreditCardInformationChangedQueuePublish _ccInfoChangedQueue;
         public CreditControllerLogic(
             ICreditRepository creditRepository,
             IHttpContextAccessor contextAccessor,
             IUserRepository userRepository,
             ICASExceptionRepository exceptionRepository,
-            BenchmarkMethodCache benchmarkMethodCache,
             CreditCardInformationChangedQueuePublish ccInfoChangedQueue
             )
         {
@@ -35,14 +33,13 @@ namespace API.ControllersLogic
             this._contextAccessor = contextAccessor;
             this._userRepository = userRepository;
             this._exceptionRepository = exceptionRepository;
-            this._benchmarkMethodCache = benchmarkMethodCache;
             this._ccInfoChangedQueue = ccInfoChangedQueue;
         }
 
         #region AddCreditCard
         public async Task<IActionResult> AddCreditCard(AddCreditCardRequest body, HttpContext httpContext)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(httpContext);
+            
             IActionResult result = null;
             try
             {
@@ -70,8 +67,8 @@ namespace API.ControllersLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end." });
             }
-            logger.EndExecution();
-            this._benchmarkMethodCache.AddLog(logger);
+            
+            
             return result;
         }
         #endregion
@@ -79,7 +76,7 @@ namespace API.ControllersLogic
         #region ValidateCreditCard
         public async Task<IActionResult> ValidateCreditCard([FromBody] CreditValidateRequest body, HttpContext httpContext)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(httpContext);
+            
             IActionResult result = null;
             try
             {
@@ -110,8 +107,8 @@ namespace API.ControllersLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestResult();
             }
-            logger.EndExecution();
-            this._benchmarkMethodCache.AddLog(logger);
+            
+            
             return result;
         }
         #endregion
