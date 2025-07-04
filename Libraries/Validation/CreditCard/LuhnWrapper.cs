@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using LuhnNet;
+﻿using LuhnNet;
+using System.Threading.Tasks;
 
 namespace Validation.CreditCard
 {

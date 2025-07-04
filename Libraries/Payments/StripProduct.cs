@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Stripe;
+using System;
 using System.Threading.Tasks;
-using Stripe;
 
 namespace Payments
 {

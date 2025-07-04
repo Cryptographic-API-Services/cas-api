@@ -1,7 +1,6 @@
 ﻿using API.ControllerLogic;
 using API.ControllersLogic;
 using API.HelperServices;
-using DataLayer.Cache;
 using DataLayer.Mongo;
 using DataLayer.Mongo.Repositories;
 using DataLayer.RabbitMQ;
@@ -50,7 +49,6 @@ namespace API.Config
             this._services.AddSingleton<IRedisClient, RedisClient>();
             this._services.AddSingleton<IDatabaseSettings, DatabaseSettings>();
             this._services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            this._services.AddSingleton<BenchmarkMethodCache>();
             this._services.AddSingleton<RabbitMQConnection>();
             this._services.AddSingleton<LogRequestQueuePublish>();
         }
@@ -58,7 +56,6 @@ namespace API.Config
         {
             //  Repositories
             this._services.AddScoped<IUserRepository, UserRepository>();
-            this._services.AddScoped<IMethodBenchmarkRepository, MethodBenchmarkRepository>();
             this._services.AddScoped<ICreditRepository, CreditRepository>();
             this._services.AddScoped<IFailedLoginAttemptRepository, FailedLoginAttemptRepository>();
             this._services.AddScoped<IForgotPasswordRepository, ForgotPasswordRepository>();
@@ -76,7 +73,6 @@ namespace API.Config
             this._services.AddScoped<IUserLoginControllerLogic, UserLoginControllerLogic>();
             this._services.AddScoped<ICreditControllerLogic, CreditControllerLogic>();
             this._services.AddScoped<ITwoFAControllerLogic, TwoFAControllerLogic>();
-            this._services.AddScoped<IUIDataControllerLogic, UIDataControllerLogic>();
             this._services.AddScoped<ITokenControllerLogic, TokenControllerLogic>();
             this._services.AddScoped<IPaymentsControllerLogic, PaymentsControllerLogic>();
             this._services.AddScoped<IPasswordControllerLogic, PasswordControllerLogic>();

@@ -1,15 +1,13 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
-using API.HelperServices;
+﻿using API.HelperServices;
 using CASHelpers;
 using CASHelpers.Types.HttpResponses.UserAuthentication;
-using Common;
-using DataLayer.Cache;
 using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using DataLayer.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Models.UserAuthentication;
+using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 
 namespace API.ControllerLogic
 {
@@ -17,20 +15,20 @@ namespace API.ControllerLogic
     {
         private readonly IUserRepository _userRepository;
         private readonly ICASExceptionRepository _exceptionRepository;
-        private readonly BenchmarkMethodCache _benchMarkMethodCache;
+
         private readonly IRedisClient _redisClient;
         private readonly IJWTPublicKeyTrustCertificate _jwtPublicKeyTrustCertificate;
         public TokenControllerLogic(
             IUserRepository userRepository,
             ICASExceptionRepository exceptionRepository,
-            BenchmarkMethodCache benchMarkMethodCache,
+
             IRedisClient redisClient,
             IJWTPublicKeyTrustCertificate jwtPublicKeyTrustCertificate
             )
         {
             this._userRepository = userRepository;
             this._exceptionRepository = exceptionRepository;
-            this._benchMarkMethodCache = benchMarkMethodCache;
+
             this._redisClient = redisClient;
             this._jwtPublicKeyTrustCertificate = jwtPublicKeyTrustCertificate;
         }
@@ -38,7 +36,7 @@ namespace API.ControllerLogic
         #region GetToken
         public async Task<IActionResult> GetToken(HttpContext httpContext)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(httpContext);
+
             IActionResult result = null;
             try
             {
@@ -76,8 +74,8 @@ namespace API.ControllerLogic
                 result = new BadRequestObjectResult(new { error = "Something went wrong on our end" });
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
         #endregion
@@ -85,7 +83,7 @@ namespace API.ControllerLogic
         #region GetRefreshToken
         public async Task<IActionResult> GetRefreshToken(HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -127,8 +125,8 @@ namespace API.ControllerLogic
                 // TODO: give error message
                 result = new BadRequestObjectResult(new { });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
 
@@ -142,7 +140,7 @@ namespace API.ControllerLogic
         /// <returns></returns>
         public async Task<IActionResult> IsTokenValid(HttpContext httpContext)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(httpContext);
+
             IActionResult result = new OkObjectResult(new IsTokenValidResponse() { IsTokenValid = true });
             try
             {
@@ -170,8 +168,8 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new IsTokenValidResponse() { IsTokenValid = false });
             }
-            logger.EndExecution();
-            this._benchMarkMethodCache.AddLog(logger);
+
+
             return result;
         }
         #endregion

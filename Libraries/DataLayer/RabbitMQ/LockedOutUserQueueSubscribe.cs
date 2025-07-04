@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
-using Common.Email;
+﻿using Common.Email;
 using Common.UniqueIdentifiers;
 using DataLayer.Mongo.Repositories;
 using DataLayer.RabbitMQ.QueueMessages;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System;
+using System.Collections.Generic;
+using System.Text.Json;
 using static Common.UniqueIdentifiers.Generator;
 
 namespace DataLayer.RabbitMQ

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Text;
-using CASHelpers;
+﻿using CASHelpers;
 using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using DataLayer.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System;
+using System.Text;
 
 namespace Validation.Attributes
 {

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using DataLayer.Mongo.Entities;
+﻿using DataLayer.Mongo.Entities;
+using System.Collections.Generic;
 
 namespace DataLayer.Mongo.CustomEntities
 {

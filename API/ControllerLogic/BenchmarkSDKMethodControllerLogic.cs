@@ -1,16 +1,14 @@
-﻿using System.Reflection;
-using System.Text;
-using System.Text.Json;
-using CasDotnetSdk.Symmetric;
+﻿using CasDotnetSdk.Symmetric;
 using CasDotnetSdk.Symmetric.Types;
 using CASHelpers;
 using CASHelpers.Types.HttpResponses.BenchmarkAPI;
-using Common;
-using DataLayer.Cache;
 using DataLayer.Mongo.Repositories;
 using DataLayer.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Models.BenchmarkSDKSend;
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
 
 namespace API.ControllerLogic
 {
@@ -19,22 +17,22 @@ namespace API.ControllerLogic
         private readonly IBenchmarkSDKMethodRepository _benchmarkSDKMethodRepository;
         private readonly ICASExceptionRepository _exceptionRepository;
         private readonly IRedisClient _redisClient;
-        private readonly BenchmarkMethodCache _benchmarkMethodCache;
+
         public BenchmarkSDKMethodControllerLogic(
             IBenchmarkSDKMethodRepository benchmarkSDKMethodRepository,
             ICASExceptionRepository exceptionRepository,
-            IRedisClient redisClient,
-            BenchmarkMethodCache benchmarkMethodCache)
+            IRedisClient redisClient
+        )
+
         {
             this._benchmarkSDKMethodRepository = benchmarkSDKMethodRepository;
             this._exceptionRepository = exceptionRepository;
             this._redisClient = redisClient;
-            this._benchmarkMethodCache = benchmarkMethodCache;
         }
 
         public async Task<IActionResult> GetUserBenchmarksByDays(int daysAgo, HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -60,14 +58,14 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end." });
             }
-            logger.EndExecution();
-            this._benchmarkMethodCache.AddLog(logger);
+
+
             return result;
         }
 
         public async Task<IActionResult> CreateMethodSDKBenchmark(BenchmarkMacAddressSDKMethod sdkMethod, HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -95,8 +93,8 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our end." });
             }
-            logger.EndExecution();
-            this._benchmarkMethodCache.AddLog(logger);
+
+
             return result;
         }
     }

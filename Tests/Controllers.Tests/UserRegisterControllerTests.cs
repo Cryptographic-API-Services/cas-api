@@ -1,7 +1,6 @@
 ﻿using API.Config;
 using API.Controllers;
 using CASHelpers;
-using DataLayer.Cache;
 using DataLayer.Mongo;
 using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
@@ -49,7 +48,6 @@ namespace Controllers.Tests
                 new ForgotPasswordRepository(databaseSettings, client),
                 new LogRequestRepository(databaseSettings, client),
                 new CASExceptionRepository(databaseSettings, client),
-                new BenchmarkMethodCache(databaseSettings, client),
                 new ActivateUserQueuePublish(rabbitMqconnection),
                 new EmergencyKitQueuePublish(rabbitMqconnection)
                 ), mockHttpContextAccessor.Object);

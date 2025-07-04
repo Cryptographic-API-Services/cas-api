@@ -1,7 +1,7 @@
-﻿using System;
-using System.Text;
-using CasDotnetSdk.Hybrid;
+﻿using CasDotnetSdk.Hybrid;
 using CasDotnetSdk.Hybrid.Types;
+using System;
+using System.Text;
 
 namespace Common.EmergencyKit
 {

@@ -1,10 +1,10 @@
-using System;
 using DataLayer.Mongo;
 using DataLayer.Mongo.Repositories;
 using DataLayer.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
+using System;
 
 namespace Email_Service
 {

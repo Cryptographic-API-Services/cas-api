@@ -1,14 +1,9 @@
-﻿using System.Reflection;
-using System.Text;
-using System.Text.Json;
-using API.ControllersLogic;
+﻿using API.ControllersLogic;
 using CasDotnetSdk.Asymmetric;
 using CasDotnetSdk.PasswordHashers;
 using CasDotnetSdk.Signatures;
 using CASHelpers;
-using Common;
 using Common.EmergencyKit;
-using DataLayer.Cache;
 using DataLayer.Mongo.Repositories;
 using DataLayer.RabbitMQ;
 using DataLayer.RabbitMQ.QueueMessages;
@@ -16,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Models.UserAuthentication;
 using Payments;
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
 using Validation.UserRegistration;
 using User = DataLayer.Mongo.Entities.User;
 
@@ -29,7 +27,7 @@ namespace API.Config
         private readonly IForgotPasswordRepository _forgotPasswordRepository;
         private readonly ILogRequestRepository _logRequestRespository;
         private readonly ICASExceptionRepository _exceptionRepository;
-        private readonly BenchmarkMethodCache _benchmarkMethodCache;
+
         private readonly ActivateUserQueuePublish _activateUserQueue;
         private readonly EmergencyKitQueuePublish _emergencyKitQueuePublish;
         public UserRegisterControllerLogic(
@@ -37,7 +35,7 @@ namespace API.Config
             IForgotPasswordRepository forgotPasswordRepository,
             ILogRequestRepository logRequestRespository,
             ICASExceptionRepository exceptionRespitory,
-            BenchmarkMethodCache benchmarkMethodCache,
+
             ActivateUserQueuePublish activateUserQueue,
             EmergencyKitQueuePublish emergencyKitQueuePublish
             )
@@ -46,7 +44,7 @@ namespace API.Config
             this._forgotPasswordRepository = forgotPasswordRepository;
             this._logRequestRespository = logRequestRespository;
             this._exceptionRepository = exceptionRespitory;
-            this._benchmarkMethodCache = benchmarkMethodCache;
+
             this._activateUserQueue = activateUserQueue;
             this._emergencyKitQueuePublish = emergencyKitQueuePublish;
         }
@@ -54,7 +52,7 @@ namespace API.Config
         #region RegisterUser
         public async Task<IActionResult> RegisterUser(RegisterUser body, HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -88,8 +86,8 @@ namespace API.Config
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our side" });
             }
-            logger.EndExecution();
-            this._benchmarkMethodCache.AddLog(logger);
+
+
             return result;
         }
 
@@ -111,7 +109,7 @@ namespace API.Config
 
         public async Task<IActionResult> ActivateUser(ActivateUser body, HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -136,14 +134,14 @@ namespace API.Config
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our side." });
             }
-            logger.EndExecution();
-            this._benchmarkMethodCache.AddLog(logger);
+
+
             return result;
         }
 
         public async Task<IActionResult> InactiveUser(InactiveUser body, HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -170,8 +168,8 @@ namespace API.Config
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our side." });
             }
-            logger.EndExecution();
-            this._benchmarkMethodCache.AddLog(logger);
+
+
             return result;
         }
         #endregion
@@ -179,7 +177,7 @@ namespace API.Config
         #region DeleteUser
         public async Task<IActionResult> DeleteUser(HttpContext context)
         {
-            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
+
             IActionResult result = null;
             try
             {
@@ -195,8 +193,8 @@ namespace API.Config
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "There was an error on our side." });
             }
-            logger.EndExecution();
-            this._benchmarkMethodCache.AddLog(logger);
+
+
             return result;
         }
         #endregion

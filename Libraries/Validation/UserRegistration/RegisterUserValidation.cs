@@ -1,5 +1,5 @@
-﻿using System;
-using Models.UserAuthentication;
+﻿using Models.UserAuthentication;
+using System;
 
 namespace Validation.UserRegistration
 {
