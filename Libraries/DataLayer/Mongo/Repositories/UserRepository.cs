@@ -45,9 +45,8 @@ namespace DataLayer.Mongo.Repositories
                     Zip = model.Zip,
                     Country = model.Country
                 },
-                Phone2FA = new Phone2FA()
+                Email2FA = new Email2FA()
                 {
-                    PhoneNumber = null,
                     IsEnabled = false
                 },
                 CreationTime = DateTime.UtcNow,
@@ -162,37 +161,24 @@ namespace DataLayer.Mongo.Repositories
             return await this._userCollection.Find(x => x.Username == username).FirstOrDefaultAsync();
         }
 
-        public async Task<Phone2FA> GetPhone2FAStats(string userId)
+        public async Task<Email2FA> GetEmail2FAStats(string userId)
         {
-            return await this._userCollection.AsQueryable().Where(x => x.Id == userId).Select(x => x.Phone2FA).FirstOrDefaultAsync();
+            return await this._userCollection.AsQueryable().Where(x => x.Id == userId).Select(x => x.Email2FA).FirstOrDefaultAsync();
         }
 
-        public async Task ChangePhone2FAStatusToEnabled(string userId)
+        public async Task ChangeEmail2FAStatusToEnabled(string userId)
         {
             var filter = Builders<User>.Filter.Eq(x => x.Id, userId);
-            var update = Builders<User>.Update.Set(x => x.Phone2FA.IsEnabled, true);
+            var update = Builders<User>.Update.Set(x => x.Email2FA.IsEnabled, true);
             await this._userCollection.UpdateOneAsync(filter, update);
         }
 
-        public async Task ChangePhone2FAStatusToDisabled(string userId)
+        public async Task ChangeEmail2FAStatusToDisabled(string userId)
         {
             var filter = Builders<User>.Filter.Eq(x => x.Id, userId);
-            var update = Builders<User>.Update.Set(x => x.Phone2FA.IsEnabled, false);
+            var update = Builders<User>.Update.Set(x => x.Email2FA.IsEnabled, false);
             await this._userCollection.UpdateOneAsync(filter, update);
         }
-
-        public async Task ChangePhoneNumberByUserID(string userId, string phoneNumber)
-        {
-            var filter = Builders<User>.Filter.Eq(x => x.Id, userId);
-            var update = Builders<User>.Update.Set(x => x.Phone2FA.PhoneNumber, phoneNumber);
-            await this._userCollection.UpdateOneAsync(filter, update);
-        }
-
-        public async Task<string> GetPhoneNumberByUserId(string userId)
-        {
-            return await this._userCollection.AsQueryable().Where(x => x.Id == userId).Select(x => x.Phone2FA.PhoneNumber).FirstOrDefaultAsync();
-        }
-
         public async Task AddCardToUser(string userId, string cardId)
         {
             var filter = Builders<User>.Filter.Eq(x => x.Id, userId);

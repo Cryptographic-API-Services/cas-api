@@ -2,9 +2,7 @@
 using DataLayer.Mongo.Entities;
 using DataLayer.Mongo.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Models.TwoFactorAuthentication;
 using System.Reflection;
-using Validation.Phone;
 
 namespace API.ControllersLogic
 {
@@ -30,7 +28,7 @@ namespace API.ControllersLogic
             try
             {
                 string userId = httpContext.Items[Constants.HttpItems.UserID].ToString();
-                Phone2FA status = await this._userRepository.GetPhone2FAStats(userId);
+                Email2FA status = await this._userRepository.GetEmail2FAStats(userId);
                 result = new OkObjectResult(new { result = status.IsEnabled });
             }
             catch (Exception ex)
@@ -41,35 +39,6 @@ namespace API.ControllersLogic
 
             return result;
         }
-
-        public async Task<IActionResult> PhoneNumberUpdate(UpdatePhoneNumber body, HttpContext httpContext)
-        {
-
-            IActionResult result = null;
-            try
-            {
-                string userId = httpContext.Items[Constants.HttpItems.UserID].ToString();
-                PhoneValidator phoneValidator = new PhoneValidator();
-                if (phoneValidator.IsPhoneNumberValid(body.PhoneNumber))
-                {
-                    await this._userRepository.ChangePhoneNumberByUserID(userId, body.PhoneNumber);
-                    result = new OkObjectResult(new { message = "You have successfully change your phone number for 2FA" });
-                }
-                else
-                {
-                    result = new BadRequestObjectResult(new { error = "You did not provide a valid phone number" });
-                }
-            }
-            catch (Exception ex)
-            {
-                await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
-                result = new BadRequestObjectResult(new { error = "There was an error on our end." });
-            }
-
-
-            return result;
-        }
-
         public async Task<IActionResult> TurnOff2FA(HttpContext httpContext)
         {
 
@@ -77,7 +46,7 @@ namespace API.ControllersLogic
             try
             {
                 string userId = httpContext.Items[Constants.HttpItems.UserID].ToString();
-                await this._userRepository.ChangePhone2FAStatusToDisabled(userId);
+                await this._userRepository.ChangeEmail2FAStatusToDisabled(userId);
                 result = new OkResult();
             }
             catch (Exception ex)
@@ -97,7 +66,7 @@ namespace API.ControllersLogic
             try
             {
                 string userId = httpContext.Items[Constants.HttpItems.UserID].ToString();
-                await this._userRepository.ChangePhone2FAStatusToEnabled(userId);
+                await this._userRepository.ChangeEmail2FAStatusToEnabled(userId);
                 result = new OkResult();
             }
             catch (Exception ex)

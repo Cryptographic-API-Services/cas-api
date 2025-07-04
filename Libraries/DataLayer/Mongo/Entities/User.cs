@@ -22,7 +22,7 @@ namespace DataLayer.Mongo.Entities
         public string DevelopmentApiKey { get; set; }
         public string TokenPublicKey { get; set; }
         public BillingInformation BillingInformation { get; set; }
-        public Phone2FA Phone2FA { get; set; }
+        public Email2FA Email2FA { get; set; }
         public LockedOut LockedOut { get; set; }
         public EmailActivationToken EmailActivationToken { get; set; }
         public ForgotPassword ForgotPassword { get; set; }
@@ -42,9 +42,8 @@ namespace DataLayer.Mongo.Entities
         public string Zip { get; set; }
         public string Country { get; set; }
     }
-    public class Phone2FA
+    public class Email2FA
     {
-        public string PhoneNumber { get; set; }
         public bool IsEnabled { get; set; }
     }
     public class EmailActivationToken

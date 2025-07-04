@@ -124,7 +124,7 @@ namespace API.ControllersLogic
                     Argon2Wrapper argon2 = new Argon2Wrapper();
                     if (argon2.Verify(activeUser.Password, body.Password))
                     {
-                        if (activeUser.Phone2FA != null && activeUser.Phone2FA.IsEnabled)
+                        if (activeUser.Email2FA != null && activeUser.Email2FA.IsEnabled)
                         {
                             byte[] secretKey = KeyGeneration.GenerateRandomKey(OtpHashMode.Sha512);
                             long counter = await this._hotpCodesRepository.GetHighestCounter() + 1;

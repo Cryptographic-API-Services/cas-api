@@ -1,6 +1,5 @@
 ﻿using API.ControllersLogic;
 using Microsoft.AspNetCore.Mvc;
-using Models.TwoFactorAuthentication;
 using Validation.Attributes;
 
 namespace API.Controllers
@@ -37,14 +36,6 @@ namespace API.Controllers
         public async Task<IActionResult> TurnOff2FA()
         {
             return await this._twoFAControllerLogic.TurnOff2FA(HttpContext);
-        }
-
-        [HttpPut]
-        [Route("UpdatePhoneNumber")]
-        [TypeFilter(typeof(ValidateJWTAttribute))]
-        public async Task<IActionResult> UpdatePhoneNumber([FromBody] UpdatePhoneNumber body)
-        {
-            return await this._twoFAControllerLogic.PhoneNumberUpdate(body, HttpContext);
         }
     }
 }

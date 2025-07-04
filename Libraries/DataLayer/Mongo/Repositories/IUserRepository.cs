@@ -25,11 +25,9 @@ namespace DataLayer.Mongo.Repositories
         public Task LockoutUser(string userId);
         public Task UpdateUsersForgotPasswordToReset(string userId, string forgotPasswordToken, string publicKey, string signedToken);
         public Task UnlockUser(string userId);
-        public Task<Phone2FA> GetPhone2FAStats(string userId);
-        public Task ChangePhone2FAStatusToEnabled(string userId);
-        public Task ChangePhone2FAStatusToDisabled(string userId);
-        public Task ChangePhoneNumberByUserID(string userId, string phoneNumber);
-        public Task<string> GetPhoneNumberByUserId(string userId);
+        public Task<Email2FA> GetEmail2FAStats(string userId);
+        public Task ChangeEmail2FAStatusToEnabled(string userId);
+        public Task ChangeEmail2FAStatusToDisabled(string userId);
         public Task AddCardToUser(string userId, string cardId);
         public Task<Tuple<string, string>> GetApiKeysById(string userId);
         public Task UpdateApiKeyByUserId(string userId, string newApiKey);
