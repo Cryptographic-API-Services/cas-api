@@ -14,20 +14,20 @@ namespace API.ControllerLogic
     public class PaymentsControllerLogic : IPaymentsControllerLogic
     {
         private readonly ICASExceptionRepository _exceptionRepository;
-
+        private readonly BenchmarkMethodCache _benchMarkMethodCache;
         private readonly IProductRepository _productRepository;
         private readonly IPriceRepository _priceRepository;
         private readonly IUserRepository _userRepository;
         public PaymentsControllerLogic(
             ICASExceptionRepository exceptionRepository,
-
+            BenchmarkMethodCache benchmarkMethodCache,
             IProductRepository productRepository,
             IPriceRepository priceRepository,
             IUserRepository userRepository
             )
         {
             this._exceptionRepository = exceptionRepository;
-
+            this._benchMarkMethodCache = benchmarkMethodCache;
             this._productRepository = productRepository;
             this._priceRepository = priceRepository;
             this._userRepository = userRepository;
@@ -35,7 +35,7 @@ namespace API.ControllerLogic
 
         public async Task<IActionResult> AssignProductToUser(HttpContext context, AssignProductToUserRequestBody body)
         {
-
+            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
             IActionResult result = null;
             try
             {
@@ -61,14 +61,14 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "Something went wrong on our end." });
             }
-
-
+            logger.EndExecution();
+            this._benchMarkMethodCache.AddLog(logger);
             return result;
         }
 
         public async Task<IActionResult> CreatePrice(HttpContext context, CreatePriceRequestBody body)
         {
-
+            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
             IActionResult result = null;
             try
             {
@@ -104,14 +104,14 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "Something went wrong on our end." });
             }
-
-
+            logger.EndExecution();
+            this._benchMarkMethodCache.AddLog(logger);
             return result;
         }
 
         public async Task<IActionResult> CreateProduct(HttpContext context, CreateProductRequestBody body)
         {
-
+            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
             IActionResult result = null;
             try
             {
@@ -146,14 +146,14 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "Something went wrong on our end." });
             }
-
-
+            logger.EndExecution();
+            this._benchMarkMethodCache.AddLog(logger);
             return result;
         }
 
         public async Task<IActionResult> DisableSubscription(HttpContext context)
         {
-
+            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
             IActionResult result = null;
             try
             {
@@ -183,14 +183,14 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "Something went wrong on our end." });
             }
-
-
+            logger.EndExecution();
+            this._benchMarkMethodCache.AddLog(logger);
             return result;
         }
 
         public async Task<IActionResult> GetBillingInformation(HttpContext context)
         {
-
+            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
             IActionResult result = null;
             try
             {
@@ -203,14 +203,14 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "Something went wrong on our end." });
             }
-
-
+            logger.EndExecution();
+            this._benchMarkMethodCache.AddLog(logger);
             return result;
         }
 
         public async Task<IActionResult> GetProducts(HttpContext context)
         {
-
+            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
             IActionResult result = null;
             try
             {
@@ -222,14 +222,14 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "Something went wrong on our end." });
             }
-
-
+            logger.EndExecution();
+            this._benchMarkMethodCache.AddLog(logger);
             return result;
         }
 
         public async Task<IActionResult> GetProductsWithPrice(HttpContext context)
         {
-
+            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
             IActionResult result = null;
             try
             {
@@ -251,14 +251,14 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "Something went wrong on our end." });
             }
-
-
+            logger.EndExecution();
+            this._benchMarkMethodCache.AddLog(logger);
             return result;
         }
 
         public async Task<IActionResult> UpdateBillingInformation(HttpContext context, UpdateBillingInformationRequestBody body)
         {
-
+            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
             IActionResult result = null;
             try
             {
@@ -274,13 +274,13 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "Something went wrong on our end." });
             }
-
-
+            logger.EndExecution();
+            this._benchMarkMethodCache.AddLog(logger);
             return result;
         }
         public async Task<IActionResult> ValidateProductSubscription(HttpContext context)
         {
-
+            BenchmarkMethodLogger logger = new BenchmarkMethodLogger(context);
             IActionResult result = null;
             try
             {
@@ -309,8 +309,8 @@ namespace API.ControllerLogic
                 await this._exceptionRepository.InsertException(ex.ToString(), MethodBase.GetCurrentMethod().Name);
                 result = new BadRequestObjectResult(new { error = "Something went wrong on our end." });
             }
-
-
+            logger.EndExecution();
+            this._benchMarkMethodCache.AddLog(logger);
             return result;
         }
     }
