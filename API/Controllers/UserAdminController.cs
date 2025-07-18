@@ -59,5 +59,14 @@ namespace API.Controllers
         {
             return await this._userAdminControllerLogic.DeleteUser(this._contextAccessor.HttpContext, request);
         }
+
+        [HttpPost]
+        [Route("RevokeSession")]
+        [TypeFilter(typeof(ValidateJWTAttribute))]
+        [TypeFilter(typeof(IsAdminAttribute))]
+        public async Task<IActionResult> RevokeSession([FromBody] RevokeUserSessionRequest request)
+        {
+            return await this._userAdminControllerLogic.RevokeSession(this._contextAccessor.HttpContext, request);
+        }
     }
 }

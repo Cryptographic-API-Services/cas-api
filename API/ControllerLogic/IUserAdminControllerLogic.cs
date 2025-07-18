@@ -9,5 +9,6 @@ namespace API.ControllerLogic
         public Task<IActionResult> UserActivationStatus(HttpContext httpContext, UserActivationStatusRequest request);
         public Task<IActionResult> UserAdminStatus(HttpContext context, UserAdminStatusRequest request);
         public Task<IActionResult> DeleteUser(HttpContext context, UserAdminDeleteUserRequest request);
+        public Task<IActionResult> RevokeSession(HttpContext context, RevokeUserSessionRequest request);
     }
 }
