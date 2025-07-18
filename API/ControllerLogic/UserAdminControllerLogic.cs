@@ -80,7 +80,6 @@ namespace API.ControllerLogic
             {
                 User activeUser = await this._userRepository.GetUserById(request.UserId);
                 ECDSAWrapper ecdsa = new ECDSAWrapper("ES521");
-                string token = new JWT().GenerateECCToken(activeUser.Id, activeUser.IsAdmin, ecdsa, 1, activeUser.StripProductId);
                 string publicKeyCacheKey = Constants.RedisKeys.UserTokenPublicKey + activeUser.Id;
                 await this._userRepository.SetUserTokenPublicKey(activeUser.Id, ecdsa.PublicKey);
                 this._redisClient.SetString(publicKeyCacheKey, ecdsa.PublicKey, new TimeSpan(1, 0, 0));
