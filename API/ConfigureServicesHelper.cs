@@ -50,7 +50,16 @@ namespace API.Config
             this._services.AddSingleton<IDatabaseSettings, DatabaseSettings>();
             this._services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             this._services.AddSingleton<RabbitMQConnection>();
+
+            //Rabbit MQ Queues
             this._services.AddSingleton<LogRequestQueuePublish>();
+            this._services.AddScoped<ActivateUserQueuePublish>();
+            this._services.AddScoped<ForgotPasswordQueuePublish>();
+            this._services.AddScoped<LockedOutUserQueuePublish>();
+            this._services.AddScoped<CreditCardInformationChangedQueuePublish>();
+            this._services.AddScoped<Email2FAHotpCodeQueuePublish>();
+            this._services.AddScoped<EmergencyKitQueuePublish>();
+            this._services.AddScoped<EmergencyKitRecoveryPublish>();
         }
         private void SetupScoped()
         {
@@ -88,15 +97,6 @@ namespace API.Config
 
             // Validaton
             this._services.AddScoped<UserSettingsValidation>();
-
-            //Rabbit MQ Queues
-            this._services.AddScoped<ActivateUserQueuePublish>();
-            this._services.AddScoped<ForgotPasswordQueuePublish>();
-            this._services.AddScoped<LockedOutUserQueuePublish>();
-            this._services.AddScoped<CreditCardInformationChangedQueuePublish>();
-            this._services.AddScoped<Email2FAHotpCodeQueuePublish>();
-            this._services.AddScoped<EmergencyKitQueuePublish>();
-            this._services.AddScoped<EmergencyKitRecoveryPublish>();
         }
 
         private void SetupKestralAndIISOptions()
