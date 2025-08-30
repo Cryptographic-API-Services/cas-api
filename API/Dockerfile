@@ -20,7 +20,6 @@ RUN dotnet publish API.csproj -c $BUILD_CONFIGURATION -r $RID --no-self-containe
 # Runtime on Ubuntu 24.04 with ASP.NET 9.0 preinstalled
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble AS final
 WORKDIR /app
-USER 1000
 COPY --from=build /app/publish .
 EXPOSE 8080 8081
 ENTRYPOINT ["dotnet", "API.dll"]
