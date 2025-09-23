@@ -4,5 +4,6 @@
     {
         public string MacAddress { get; set; }
         public byte[] EncryptedBenchMarkSend { get; set; }
+        public byte[] AesNonce { get; set; }
     }
 }
